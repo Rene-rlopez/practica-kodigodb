@@ -5,7 +5,7 @@
             &copy; Copyright <strong><span>2023</span></strong>
         </div>
         <div class="credits">
-            Designed by <a href="#">Kenia Paiz</a>
+            Designed by <a href="#">FSJ18</a>
         </div>
         </div>
 </footer><!-- End  Footer -->

@@ -1,6 +1,6 @@
 <?php
     //iniciando la sesion
-    session_start();
+    //session_start();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,16 +29,16 @@
             require "./clases/Estudiantes.php";
 
             $estudiante = new Estudiante();
-            $arreglo_datos = $estudiante->getDesertados();
+            $arreglo_datos = $estudiante->getAllInfo();
+            $arreglo_bootcamps = $estudiante->getBootcampDisponibles();
     ?>
 
     <main id="main">
         <section class="container">
-            <h1 class="text-center text-primary">Reubicaciones</h1>
+            <h1 class="text-center text-dark">Reubicaciones</h1>
             <div class="table-responsive pt-4">
-                <table class="table table-dark">
+                <table class="table table-light">
                     <thead>
-                        <th>#</th>
                         <th>Nombre</th>
                         <th>Direccion</th>
                         <th>Bootcamp</th>
@@ -48,11 +48,10 @@
                     <tbody>
                     <?php foreach($arreglo_datos as $item){ ?>
                         <tr>
-                            <td><?php $count = 0; echo $count++;?></td>
                             <td><?php echo $item["nombre"]; ?></td>
                             <td><?php echo $item["direccion"]; ?></td>
                             <td><?php echo $item["bootcamp"]; ?></td>
-                            <td><?php echo $item["id_estado"]; ?></td>
+                            <td><?php echo $item["estado"]; ?></td>
                             <td>
                                 <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ModalEstado<?php echo $item["id"]; ?>">Reubicar estudiante</button>
                             </td>
@@ -61,16 +60,16 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5 text-primary" id="exampleModalLabel">Reubicar estudiante</h1>
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Reubicar estudiante</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <form action="" method="POST">
                                 <div class="modal-body">
                                     <h5><?php echo $item["nombre"]; ?></h5>
                                     <input type="hidden" name="id_estudiante" value="<?php echo $item["id"]; ?>">
-                                    <p><strong>Bootcamp: </strong><?php echo $item['id_bootcamp']; ?></p>
+                                    <p><strong>Bootcamp: </strong> <span class="text-danger"><?php echo $item['bootcamp']; ?></span></p>
                                         <label for="" class="form-label">Seleccione un bootcamp</label>
-                                        <select name="estado" id="" class="form-control">
+                                        <select name="bootcamp" id="" class="form-control">
                                             <?php foreach($arreglo_bootcamps as $bootcamp){ ?>
                                                 <option value="<?php echo $bootcamp['id']; ?>"><?php echo $bootcamp['bootcamp']; ?></option>
                                             <?php } ?>
@@ -82,7 +81,7 @@
                                 </div>
                             </form>
 
-                            <?php $estudiante->actualizarEstadoDesercionEgresado(); ?>
+                            <?php $estudiante->actualizarEstadoBootcamp(); ?>
                             </div>
                         </div>
                         <?php } ?>

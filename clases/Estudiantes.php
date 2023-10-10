@@ -100,8 +100,7 @@ class Estudiante extends Conexion{
             $query->execute();
             $resultado = $query->fetchAll(PDO::FETCH_ASSOC);
             return $resultado;
-        }   
-        
+        }
     }
 
     #actualizar estudiante
@@ -169,8 +168,52 @@ class Estudiante extends Conexion{
         $resultado = $query->fetchAll(PDO::FETCH_ASSOC);//arreglo de objetos
         return $resultado;
     }
+
+    #metodo que obtiene la informacion de todos los estudiantes
+    public function getAllInfo(){
+        //llamamos al metodo conectar de la clase conexion
+        $pdo = $this->conectar(); //PDO
+        //generamos la consulta
+        $query = $pdo->query("SELECT estudiantes.*, bootcamp.bootcamp, estado.estado FROM estudiantes INNER JOIN bootcamp ON estudiantes.id_bootcamp = bootcamp.id INNER JOIN estado ON estudiantes.id_estado = estado.id WHERE estudiantes.id_estado = 1 or estudiantes.id_estado = 2");
+        //ejecutemos la consulta
+        $query->execute(); //[]
+        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);//arreglo de objetos
+        return $resultado;
+    }
+
+    public function getBootcampDisponibles(){
+        //llamamos al metodo conectar de la clase conexion
+        $pdo = $this->conectar(); //PDO
+        //generamos la consulta
+        $query = $pdo->query("SELECT id, bootcamp FROM bootcamp");
+        //ejecutemos la consulta
+        $query->execute(); //[]
+        $resultado = $query->fetchAll(PDO::FETCH_ASSOC);//arreglo de objetos
+        return $resultado;
+    }
+
+
+    #metodo para actualizar el bootcamp y el estado del estudiante
+    public function actualizarEstadoBootcamp(){
+        if(isset($_POST['id_estudiante'], $_POST['bootcamp'])){
+            $this->id = $_POST['id_estudiante']; //2
+            $this->bootcamp = $_POST['bootcamp'];
+            //$this->estado = $_POST['reubicado'];
+
+            $pdo = $this->conectar();
+            $query = $pdo->prepare("UPDATE estudiantes SET id_bootcamp = ?, id_estado = 2 WHERE id = ?");
+
+            $resultado = $query->execute([$this->bootcamp, $this->id]);
+            if($resultado){
+                echo "<script>
+                    window.location = 'reubicacion_estudiante.php'
+                </script>";
+            }else{
+                echo "Error, al cambiar el estado del estudiante";
+            }
+        }
+    }
+
+
 }
-
-
-
 ?>
